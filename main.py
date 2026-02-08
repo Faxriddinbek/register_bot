@@ -4,7 +4,7 @@ import logging
 from aiogram import Dispatcher, Bot
 
 from core.database_settings import database
-from handlers.register import router
+from handlers import register, settings
 from core.config import BOT_TOKEN, DEVELOPER
 from utils.set_defaulds_commands import set_default_commands
 
@@ -24,7 +24,9 @@ async def main():
     dp.startup.register(startup)
     dp.shutdown.register(shutdown)
 
-    dp.include_router(router=router)
+    # Bu ro'tur haqidagi asosiyga habar
+    dp.include_router(router=register.router)
+    dp.include_router(router=settings.router)
 
     await dp.start_polling(bot, polling_timeout=0)
 

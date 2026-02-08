@@ -1,20 +1,25 @@
 from aiogram import Router, F
 from aiogram.enums import ContentType
+from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
 
-from keyboards.default import phone_number
+from keyboards.default import phone_number, user_main_menu
 from keyboards.inline import languages
 from states.register import RegisterState
-from utils.db_commands.user import add_user
+from utils.db_commands.user import add_user, get_user
 
 router = Router()
 
-@router.message(F.text == "/start")
+@router.message(Command('start'))
 async def start_handler(message: Message, state: FSMContext):
-    text = "Iltmos tilni tanlang\nPlease select the language"
-    await message.answer(text=text, reply_markup=languages)
-    await state.set_state(RegisterState.language)
+    if await get_user(chat_id=message.chat.id):
+        text = "Welcome 👋"
+        await message.answer(text=text, reply_markup=user_main_menu)
+    else:
+        text = "Iltmos tilni tanlang\nPlease select the language"
+        await message.answer(text=text, reply_markup=languages)
+        await state.set_state(RegisterState.language)
 
 @router.callback_query(RegisterState.language)
 async def language_handler(call: CallbackQuery, state: FSMContext):
@@ -64,10 +69,11 @@ async def age_handler(message: Message, state: FSMContext):
             text = 'Successfully registered'
         else:
             text = "Muvaffaqiyatli ro'yhatdan o'tdingiz"
+        await message.answer(text=text, reply_markup=user_main_menu)
     else:
         if lang == 'en':
             text = 'Not registered'
         else:
             text = "Botda muammo mavjud biz bilan bog'laning"
-    await message.answer(text=text)
+        await message.answer(text=text)
     await state.clear()

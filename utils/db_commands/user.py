@@ -1,3 +1,5 @@
+import logging
+
 from core.model import users
 from core.database_settings import database
 
@@ -27,4 +29,17 @@ async def add_user(data: dict) -> dict | None:
     except Exception as e:
         error_text = f"Error appeared when adding user: {e}"
         print(error_text)
+        return None
+
+
+async def get_user(chat_id: int):
+    try:
+        query = users.select().where(
+            users.c.chat_id == chat_id
+        )
+        user = await database.fetch_one(query=query)
+        return user
+    except Exception as e:
+        error_text = f"Error append when getting user: {e}"
+        logging.error(error_text)
         return None
