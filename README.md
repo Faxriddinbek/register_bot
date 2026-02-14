@@ -48,10 +48,3 @@
 
 > **Telegram Bot Registration System**  
 > Python va Aiogram 3.x asosida yaratilgan, PostgreSQL va SQLAlchemy ishlatilgan ikki tilli Telegram bot. Foydalanuvchilarni ro‘yxatdan o‘tkazish, ma’lumotlarni saqlash, FSM, asinxron dasturlash va database migrations qo‘llangan.
-
----
-
-## 💬 Interview uchun qisqa javoblar
-
-**Q: Qanday texnologiyalar ishlatdingiz?**  
-P
